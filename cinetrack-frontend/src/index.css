@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design tokens ────────────────────────────────────────────────────── */
+:root {
+  --bg: #141414;
+  --red: #E50914;
+  --red-dark: #b20710;
+  --surface: #1f1f1f;
+  --surface2: #2a2a2a;
+  --text: #ffffff;
+  --text-muted: #b3b3b3;
+  --radius: 6px;
+  --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base ────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── Custom scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--red); }
+
+/* ── Horizontal scroll row (no native scrollbar) ─────────────────────── */
+.row-scroll {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 1rem 0 1rem 4%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+}
+.row-scroll::-webkit-scrollbar { display: none; }
+.row-scroll:active { cursor: grabbing; }
+
+/* ── Glassmorphism card ───────────────────────────────────────────────── */
+.glass {
+  background: rgba(31, 31, 31, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+}
+
+/* ── Gradient overlays ────────────────────────────────────────────────── */
+.gradient-left {
+  background: linear-gradient(to right, var(--bg) 0%, transparent 100%);
+}
+.gradient-bottom {
+  background: linear-gradient(to top, var(--bg) 0%, transparent 60%);
+}
+
+/* ── Netflix-red button ───────────────────────────────────────────────── */
+.btn-red {
+  background-color: var(--red);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+.btn-red:hover { background-color: var(--red-dark); transform: scale(1.03); }
+.btn-red:active { transform: scale(0.97); }
+
+/* ── Ghost button ─────────────────────────────────────────────────────── */
+.btn-ghost {
+  background: rgba(109, 109, 110, 0.7);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.55rem 1.4rem;
+  border-radius: var(--radius);
+  border: none;
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+.btn-ghost:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Genre chip ───────────────────────────────────────────────────────── */
+.genre-chip {
+  display: inline-block;
+  background: rgba(229, 9, 20, 0.15);
+  color: var(--red);
+  border: 1px solid rgba(229, 9, 20, 0.35);
+  border-radius: 9999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ── Shimmer skeleton ─────────────────────────────────────────────────── */
+@keyframes shimmer {
+  from { background-position: -400px 0; }
+  to   { background-position:  400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #1f1f1f 25%, #2a2a2a 50%, #1f1f1f 75%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: var(--radius);
+}
+
+/* ── Team card glow ───────────────────────────────────────────────────── */
+.team-card:hover .team-glow {
+  opacity: 1;
+}
+.team-glow {
+  opacity: 0;
+  transition: opacity 0.4s;
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #E50914, #ff6b6b, #E50914);
+  filter: blur(16px);
+  z-index: -1;
+}
+
+/* ── Page wrapper fade ────────────────────────────────────────────────── */
+.page-enter {
+  opacity: 0;
+  transform: translateY(16px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.4s, transform 0.4s;
+}
+
+/* ── Dashboard card ───────────────────────────────────────────────────── */
+.stat-card {
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* ── Map tooltip ─────────────────────────────────────────────────────── */
+.map-tooltip {
+  background: #1f1f1f;
+  border: 1px solid var(--red);
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  pointer-events: none;
+}

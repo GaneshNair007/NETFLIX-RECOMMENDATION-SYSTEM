@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Backend data & secrets
+cinetrack-backend/.env
+cinetrack-backend/data/tfidf_cache.pkl
+cinetrack-backend/data/user_data.json
+
+# Node
+cinetrack-frontend/node_modules/
+cinetrack-frontend/dist/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.user

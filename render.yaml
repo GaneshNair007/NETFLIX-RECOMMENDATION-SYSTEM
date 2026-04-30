@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: cinetrack-backend
+    runtime: python
+    region: oregon
+    plan: free
+    rootDir: cinetrack-backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: TMDB_API_KEY
+        sync: false

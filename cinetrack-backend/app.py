@@ -9,7 +9,7 @@ from contextlib import asynccontextmanager
 from typing import Optional
 
 from recommender import Recommender
-from routes import recommend, search, user, dashboard, country, metadata
+from routes import recommend, search, user, dashboard, country, metadata, personalized
 
 # ── Shared recommender instance ────────────────────────────────────────────────
 _recommender: Optional[Recommender] = None
@@ -25,6 +25,7 @@ async def lifespan(app: FastAPI):
     search.set_recommender(_recommender)
     dashboard.set_recommender(_recommender)
     country.set_recommender(_recommender)
+    personalized.set_recommender(_recommender)
     print("[CineTrack] Ready ✓")
     yield
     print("[CineTrack] Shutting down…")
@@ -53,6 +54,7 @@ app.include_router(user.router)
 app.include_router(dashboard.router)
 app.include_router(country.router)
 app.include_router(metadata.router)
+app.include_router(personalized.router)
 
 
 @app.get("/")

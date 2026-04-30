@@ -32,6 +32,7 @@ export default function Navbar() {
     }
 
     const totalWatched = lists.watched?.length || 0
+    const hasHistory = totalWatched + (lists.watching?.length || 0) + (lists.want?.length || 0) > 0
 
     const navLinks = [
         { label: 'Home', to: '/' },
@@ -42,8 +43,7 @@ export default function Navbar() {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-netflix-black shadow-2xl' : 'bg-gradient-to-b from-black/80 to-transparent'
-                }`}
+            className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled ? 'bg-netflix-black shadow-2xl' : 'bg-gradient-to-b from-black/80 to-transparent'}`}
         >
             <div className="flex items-center justify-between px-4 md:px-12 py-3">
                 {/* Logo */}
@@ -60,8 +60,7 @@ export default function Navbar() {
                             <Link
                                 key={link.label}
                                 to={link.to}
-                                className={`text-sm font-medium transition-colors hover:text-white ${location.pathname === link.to ? 'text-white' : 'text-netflix-gray-light'
-                                    }`}
+                                className={`text-sm font-medium transition-colors hover:text-white ${location.pathname === link.to ? 'text-white' : 'text-netflix-gray-light'}`}
                             >
                                 {link.label}
                             </Link>
@@ -75,6 +74,20 @@ export default function Navbar() {
                             </button>
                         )
                     )}
+
+                    {/* For You — special link with pulse dot */}
+                    <Link
+                        to="/for-you"
+                        className={`relative text-sm font-bold transition-colors flex items-center gap-1.5 ${location.pathname === '/for-you' ? 'text-[#E50914]' : 'text-white/70 hover:text-white'}`}
+                    >
+                        ✨ For You
+                        {hasHistory && location.pathname !== '/for-you' && (
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E50914] opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E50914]" />
+                            </span>
+                        )}
+                    </Link>
                 </div>
 
                 {/* Right side */}

@@ -4,7 +4,7 @@ import axios from 'axios'
 // In local dev, falls back to '/api' which vite.config.js proxies to localhost:8000
 const BASE = import.meta.env.VITE_API_URL || '/api'
 
-const api = axios.create({ baseURL: BASE, timeout: 10000 })
+const api = axios.create({ baseURL: BASE, timeout: 15000 })
 
 export const getRecommendations = (movie) =>
     api.get('/recommend', { params: { movie } }).then((r) => r.data)
@@ -35,5 +35,22 @@ export const getTrending = () =>
 
 export const getByGenre = (genre) =>
     api.get(`/genre/${encodeURIComponent(genre)}`).then((r) => r.data)
+
+// ── Personalization ────────────────────────────────────────────────────────────
+
+export const getPersonalized = (profile, filters = {}, top_n = 30) =>
+    api.post('/personalized', { profile, filters, top_n }).then((r) => r.data)
+
+export const rateMovie = (movie, rating) =>
+    api.post('/user/rate', { movie, rating }).then((r) => r.data)
+
+export const getUserProfile = () =>
+    api.get('/user/profile').then((r) => r.data)
+
+export const submitOnboarding = (picks, ratings = {}) =>
+    api.post('/user/onboard', { picks, ratings }).then((r) => r.data)
+
+export const getOnboardingMovies = () =>
+    api.get('/onboarding-movies').then((r) => r.data)
 
 export default api

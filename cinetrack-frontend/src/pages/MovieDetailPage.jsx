@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { getRecommendations, getMetadata } from '../api/api'
 import { useUserList } from '../context/UserListContext'
 import MovieRow from '../components/MovieRow'
+import StarRating from '../components/StarRating'
 
 const PAGE = {
     initial: { opacity: 0, y: 20 },
@@ -14,13 +15,13 @@ const PAGE = {
 export default function MovieDetailPage() {
     const { title } = useParams()
     const navigate = useNavigate()
-    const { addToList, getState } = useUserList()
+    const { addToList, getState, rateMovie, ratings } = useUserList()
     const [recs, setRecs] = useState(null)
     const [meta, setMeta] = useState(null)
     const [loading, setLoading] = useState(true)
-    const state = getState(title)
-
     const decodedTitle = decodeURIComponent(title)
+    const state = getState(decodedTitle)
+    const userRating = ratings[decodedTitle] || 0
 
     useEffect(() => {
         setLoading(true)
@@ -107,14 +108,6 @@ export default function MovieDetailPage() {
                         {meta?.overview || movie.detailed?.[0]?.description || 'No description available.'}
                     </p>
 
-                    {/* Why Recommended */}
-                    {movie.reason && (
-                        <div className="mt-5 p-4 rounded-lg bg-netflix-red/10 border border-netflix-red/30">
-                            <p className="text-netflix-red font-semibold text-xs uppercase tracking-wide mb-1">Why Recommended</p>
-                            <p className="text-white/80 text-sm">{movie.reason}</p>
-                        </div>
-                    )}
-
                     {/* Add to list buttons */}
                     <div className="flex flex-wrap gap-3 mt-6">
                         {[
@@ -126,20 +119,35 @@ export default function MovieDetailPage() {
                                 key={opt.value}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => addToList(decodedTitle, opt.value)}
-                                className={`px-4 py-2 rounded text-white text-sm font-semibold transition ${opt.color} ${state === opt.value ? 'ring-2 ring-white' : ''
-                                    }`}
+                                className={`px-4 py-2 rounded text-white text-sm font-semibold transition ${opt.color} ${state === opt.value ? 'ring-2 ring-white' : ''}`}
                             >
                                 {opt.label}
                             </motion.button>
                         ))}
                     </div>
+
+                    {/* Star Rating */}
+                    <div className="mt-5">
+                        <p className="text-white/40 text-xs mb-2 uppercase tracking-wider font-semibold">Rate this movie</p>
+                        <StarRating
+                            movie={decodedTitle}
+                            initialRating={userRating}
+                            onRate={rateMovie}
+                            size="lg"
+                        />
+                        {userRating > 0 && (
+                            <p className="text-white/30 text-xs mt-2">
+                                Your rating influences your personalized recommendations
+                            </p>
+                        )}
+                    </div>
                 </div>
             </div>
 
-            {/* Similar Movies */}
+            {/* Personalized Picks */}
             {movie.detailed?.length > 1 && (
                 <div className="mt-12 pb-16">
-                    <MovieRow title="Similar Movies" movies={movie.detailed.slice(1)} />
+                    <MovieRow title="🎯 You Might Also Like" movies={movie.detailed.slice(1)} />
                 </div>
             )}
         </motion.div>

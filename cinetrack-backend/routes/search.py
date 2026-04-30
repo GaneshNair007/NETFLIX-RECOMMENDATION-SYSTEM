@@ -13,5 +13,5 @@ def set_recommender(rec: Recommender):
 
 @router.get("/search")
 async def search(q: str = Query(..., min_length=1)):
-    results = _rec.search(q, top_n=10)
+    results = _rec.search(q, top_n=20)
     return {"query": q, "results": results, "count": len(results)}

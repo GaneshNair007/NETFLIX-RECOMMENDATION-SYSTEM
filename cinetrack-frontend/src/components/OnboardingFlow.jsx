@@ -3,6 +3,50 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { getOnboardingMovies } from '../api/api'
 import { useUserList } from '../context/UserListContext'
 
+// Hardcoded fallback — shown when backend is offline
+const FALLBACK_MOVIES = [
+    { title: 'The Dark Knight', listed_in: 'Action, Crime, Drama', release_year: 2008 },
+    { title: 'Inception', listed_in: 'Action, Sci-Fi, Thriller', release_year: 2010 },
+    { title: 'Interstellar', listed_in: 'Adventure, Drama, Sci-Fi', release_year: 2014 },
+    { title: 'The Shawshank Redemption', listed_in: 'Drama', release_year: 1994 },
+    { title: 'Pulp Fiction', listed_in: 'Crime, Drama, Thriller', release_year: 1994 },
+    { title: 'The Godfather', listed_in: 'Crime, Drama', release_year: 1972 },
+    { title: 'Fight Club', listed_in: 'Drama, Thriller', release_year: 1999 },
+    { title: 'Forrest Gump', listed_in: 'Drama, Romance', release_year: 1994 },
+    { title: 'The Matrix', listed_in: 'Action, Sci-Fi', release_year: 1999 },
+    { title: 'Goodfellas', listed_in: 'Crime, Drama', release_year: 1990 },
+    { title: 'The Silence of the Lambs', listed_in: 'Crime, Drama, Horror', release_year: 1991 },
+    { title: 'Schindler\'s List', listed_in: 'Biography, Drama, History', release_year: 1993 },
+    { title: 'The Lord of the Rings: The Return of the King', listed_in: 'Action, Adventure, Drama', release_year: 2003 },
+    { title: 'Django Unchained', listed_in: 'Drama, Western', release_year: 2012 },
+    { title: 'Gladiator', listed_in: 'Action, Adventure, Drama', release_year: 2000 },
+    { title: 'The Wolf of Wall Street', listed_in: 'Biography, Comedy, Crime', release_year: 2013 },
+    { title: 'Whiplash', listed_in: 'Drama, Music', release_year: 2014 },
+    { title: 'Parasite', listed_in: 'Comedy, Drama, Thriller', release_year: 2019 },
+    { title: 'Joker', listed_in: 'Crime, Drama, Thriller', release_year: 2019 },
+    { title: 'Avengers: Endgame', listed_in: 'Action, Adventure, Drama', release_year: 2019 },
+    { title: 'Spider-Man: No Way Home', listed_in: 'Action, Adventure, Fantasy', release_year: 2021 },
+    { title: 'Dune', listed_in: 'Action, Adventure, Drama', release_year: 2021 },
+    { title: 'The Revenant', listed_in: 'Action, Adventure, Drama', release_year: 2015 },
+    { title: 'Mad Max: Fury Road', listed_in: 'Action, Adventure, Sci-Fi', release_year: 2015 },
+    { title: 'La La Land', listed_in: 'Comedy, Drama, Music', release_year: 2016 },
+    { title: 'The Grand Budapest Hotel', listed_in: 'Adventure, Comedy, Crime', release_year: 2014 },
+    { title: 'John Wick', listed_in: 'Action, Crime, Thriller', release_year: 2014 },
+    { title: 'Get Out', listed_in: 'Horror, Mystery, Thriller', release_year: 2017 },
+    { title: 'Hereditary', listed_in: 'Drama, Horror, Mystery', release_year: 2018 },
+    { title: 'Knives Out', listed_in: 'Comedy, Crime, Drama', release_year: 2019 },
+    { title: 'Everything Everywhere All at Once', listed_in: 'Action, Adventure, Comedy', release_year: 2022 },
+    { title: 'Top Gun: Maverick', listed_in: 'Action, Drama', release_year: 2022 },
+    { title: 'Avatar', listed_in: 'Action, Adventure, Fantasy', release_year: 2009 },
+    { title: 'Titanic', listed_in: 'Drama, Romance', release_year: 1997 },
+    { title: 'The Dark Knight Rises', listed_in: 'Action, Drama, Thriller', release_year: 2012 },
+    { title: 'Oppenheimer', listed_in: 'Biography, Drama, History', release_year: 2023 },
+    { title: 'Barbie', listed_in: 'Adventure, Comedy, Fantasy', release_year: 2023 },
+    { title: 'The Prestige', listed_in: 'Drama, Mystery, Sci-Fi', release_year: 2006 },
+    { title: 'Memento', listed_in: 'Mystery, Thriller', release_year: 2000 },
+    { title: 'No Country for Old Men', listed_in: 'Crime, Drama, Thriller', release_year: 2007 },
+]
+
 const STEPS = ['welcome', 'pick', 'rate', 'done']
 
 export default function OnboardingFlow() {
@@ -20,8 +64,12 @@ export default function OnboardingFlow() {
         if (!alreadyOnboarded && step === 'pick') {
             setLoadingMovies(true)
             getOnboardingMovies()
-                .then((d) => setMovies(d.movies || []))
-                .catch(() => setMovies([]))
+                .then((d) => {
+                    const fetched = d.movies || []
+                    // Use fetched if we got data, else fall back to hardcoded list
+                    setMovies(fetched.length > 0 ? fetched : FALLBACK_MOVIES)
+                })
+                .catch(() => setMovies(FALLBACK_MOVIES))
                 .finally(() => setLoadingMovies(false))
         }
     }, [step, alreadyOnboarded])

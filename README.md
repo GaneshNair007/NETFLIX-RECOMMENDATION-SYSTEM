@@ -9,7 +9,7 @@
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -27,7 +27,7 @@
 Open a terminal and run:
 
 ```powershell
-cd "C:\Users\Ganesh Nair\OneDrive\Desktop\New folder\cinetrack-backend"
+cd "\cinetrack-backend"
 
 # Install Python packages
 python -m pip install -r requirements.txt
@@ -49,7 +49,7 @@ python -m uvicorn app:app --reload --port 8000
 Open a **second terminal**:
 
 ```powershell
-cd "C:\Users\Ganesh Nair\OneDrive\Desktop\New folder\cinetrack-frontend"
+cd "\cinetrack-frontend"
 
 # Install npm packages (first time only)
 npm install
